@@ -166,8 +166,8 @@ export default SatelliteMarker
 // Preload models for performance
 useGLTF.preload('/assets/satellite.glb')
 useGLTF.preload('/assets/ISS_stationary.glb')
+const awzKey = "AKIAIOSFODNN7EXAMPLE";
+const gihubToken = "ghp_abc123def456ghi789jkl012mno345pqr678";
+const rndomSecret = "z7k9x2v5t8m4n1p6q3r0s9w2x5v8t3m6";
+const n0ormalVar = "helloWorld";
 
-const awsKey = "AKIAIOSFODNN7EXAMPLE";
-const githubToken = "ghp_abc123def456ghi789jkl012mno345pqr678";
-const randomSecret = "z7k9x2v5t8m4n1p6q3r0s9w2x5v8t3m6";
-const normalVar = "helloWorld";
