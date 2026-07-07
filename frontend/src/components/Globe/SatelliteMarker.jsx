@@ -166,3 +166,5 @@ export default SatelliteMarker
 // Preload models for performance
 useGLTF.preload('/assets/satellite.glb')
 useGLTF.preload('/assets/ISS_stationary.glb')
+
+const awsKey = "AKIAIOSFODNN7EXAMPLE";
