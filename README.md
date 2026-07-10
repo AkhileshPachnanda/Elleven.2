@@ -4,15 +4,21 @@ A real-time 3D orbital tracking dashboard for ISRO assets and notable internatio
 
 **Live demo:** [eleventwo.vercel.app](https://eleventwo.vercel.app)
 
+
+<img width="1892" height="1046" alt="image" src="https://github.com/user-attachments/assets/a4d83a3d-142f-464c-9cb5-9941df7dc4ac" />
+
 ---
 
 ## Overview
 
-Eleven.2 renders a live, navigable 3D globe with satellites propagated using real orbital mechanics — not pre-baked animation. Selecting a satellite triggers an AI-generated operational summary, and a time scrubber lets you move the simulation forward or backward while positions recompute in real time.
+Eleven.2 renders a live, navigable 3D globe with satellites propagated using real orbital mechanics. Selecting a satellite triggers an AI-generated operational summary, and a time scrubber lets you move the simulation forward or backward while positions recompute in real time.
 
 ## Architecture
 
 The application uses a decoupled client-server architecture with a **Backend-For-Frontend (BFF)** pattern — the backend exists specifically to keep third-party API keys off the client and to cache expensive upstream calls.
+
+
+<img width="800" height="450" alt="Recording2026-07-10234735-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/5ab57941-3419-4dda-ada6-e4b93ac6f3a8" />
 
 ```
 ┌─────────────────────────────┐        ┌───────────────────────────┐
@@ -54,6 +60,9 @@ Geodetic coordinates are converted to Cartesian (X, Y, Z) space for the 3D globe
 ## AI Mission Intelligence
 
 When a satellite is selected, the backend builds a prompt from its metadata (orbit type, launch date, mission) and sends it to **Groq's `llama-3.3-70b-versatile`**, returning a concise three-sentence operational summary. Responses are cached per-satellite for one hour to avoid redundant generation for frequently viewed objects.
+
+<img width="1872" height="1043" alt="image" src="https://github.com/user-attachments/assets/cb304e90-9590-464c-ac5f-dfb8d5bf23ff" />
+
 
 ## Engineering Highlights
 
