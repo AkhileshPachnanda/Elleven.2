@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LandingGlobe from "../components/Globe/LandingGlobe";
@@ -9,6 +9,19 @@ import {
 
 function Landing() {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false,
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Background preload: warm GPU texture cache + JS chunk while user reads hero
   useEffect(() => {
@@ -63,7 +76,7 @@ function Landing() {
           left: 0,
           right: 0,
           zIndex: 20,
-          padding: "20px 32px",
+          padding: isMobile ? "16px 18px" : "20px 32px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -71,22 +84,30 @@ function Landing() {
       >
         <span
           style={{
-            fontSize: "13px",
+            fontSize: isMobile ? "11px" : "13px",
             fontWeight: 500,
             color: "var(--text-primary)",
             letterSpacing: "-0.01em",
+            maxWidth: isMobile ? "50%" : "auto",
+            lineHeight: 1.3,
           }}
         >
-          <a href="https://github.com/AkhileshPachnanda"
+          <a
+            href="https://github.com/AkhileshPachnanda"
             target="_blank"
-            rel="noopener noreferrer">
-          Akhilesh Pachnanda
+            rel="noopener noreferrer"
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            Akhilesh Pachnanda
           </a>
         </span>
         <div
           style={{
             display: "flex",
-            gap: "24px",
+            gap: isMobile ? "12px" : "24px",
             alignItems: "center",
           }}
         >
@@ -95,7 +116,7 @@ function Landing() {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              fontSize: "14px",
+              fontSize: isMobile ? "12px" : "14px",
               fontWeight: 500,
               color: "var(--text-secondary)",
               textDecoration: "none",
@@ -115,7 +136,7 @@ function Landing() {
       <div
         style={{
           position: "absolute",
-          paddingTop: "13vh",
+          paddingTop: isMobile ? "14vh" : "13vh",
           inset: 0,
           zIndex: 10,
           display: "flex",
@@ -124,15 +145,19 @@ function Landing() {
           alignItems: "center",
           textAlign: "center",
           pointerEvents: "none",
+          paddingLeft: isMobile ? "20px" : "0",
+          paddingRight: isMobile ? "20px" : "0",
         }}
       >
         <p
           style={{
-            fontSize: "clamp(32px, 5vw, 56px)",
+            fontSize: isMobile
+              ? "clamp(28px, 10vw, 42px)"
+              : "clamp(32px, 5vw, 56px)",
             fontWeight: 700,
             color: "var(--text-primary)",
             letterSpacing: "-0.025em",
-            marginBottom: "16px",
+            marginBottom: isMobile ? "12px" : "16px",
           }}
         >
           Elleven.2
@@ -140,27 +165,31 @@ function Landing() {
 
         <p
           style={{
-            fontSize: "16px",
+            fontSize: isMobile ? "14px" : "16px",
             fontWeight: 400,
             color: "var(--text-secondary)",
-            maxWidth: "600px",
+            maxWidth: isMobile ? "92vw" : "650px",
             lineHeight: 1.6,
-            marginBottom: "32px",
+            marginBottom: isMobile ? "24px" : "32px",
           }}
         >
           Real-time orbital tracking for ISRO assets and major satellites,
           including the ISS, made possible with{" "}
-          <b>R3F & Three.js, CelesTrak API & satellite.js</b>.
+          <b>
+            R3F & Three.js, CelesTrak API, satellite.js & gpt-oss through Groq.
+          </b>
+          {isMobile ? " " : " "}
+          <br />
+          Deployed on Vercel.
         </p>
 
         <button
-
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => navigate("/control")}
           style={{
-            padding: "12px 32px",
-            fontSize: "14px",
+            padding: isMobile ? "12px 24px" : "12px 32px",
+            fontSize: isMobile ? "12px" : "14px",
             fontWeight: 600,
             fontFamily: "inherit",
             background: "var(--accent)",
@@ -184,19 +213,23 @@ function Landing() {
       <div
         style={{
           position: "absolute",
-          bottom: "24px",
+          bottom: isMobile ? "14px" : "24px",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 20,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: "4px",
-          fontSize: "14px",
+          flexWrap: isMobile ? "wrap" : "nowrap",
+          gap: isMobile ? "3px" : "4px",
+          fontSize: isMobile ? "11px" : "14px",
           color: "rgb(255, 255, 255)",
           fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif",
-          letterSpacing: "0.02em",
+          letterSpacing: isMobile ? "0.01em" : "0.02em",
           pointerEvents: "auto",
+          textAlign: "center",
+          maxWidth: isMobile ? "85vw" : "auto",
+          lineHeight: 1.5,
         }}
       >
         <span>created by pacman.</span>

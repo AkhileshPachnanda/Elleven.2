@@ -140,7 +140,7 @@ function LandingGlobe() {
     <Canvas
       camera={{ position: [0, 0, 2], fov: 32 }}
       style={{ background: "transparent" }}
-      dpr={[1, 1.5]} // Cap pixel ratio for performance
+      dpr={[1, 1.2]} // Cap pixel ratio for performance
       gl={{
         powerPreference: "high-performance",
         antialias: true,
