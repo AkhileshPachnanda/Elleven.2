@@ -142,11 +142,11 @@ function LandingGlobe() {
   return (
     <Canvas
       camera={{
-        position: [0, 0, isMobile ? 2.35 : 2],
-        fov: isMobile ? 40 : 32,
+        position: [0, 0, isMobile ? 2.7 : 2],
+        fov: isMobile ? 46 : 32,
       }}
       style={{ background: "transparent" }}
-      dpr={[1, 1.2]} // Cap pixel ratio for performance
+      dpr={[1, 1.1]} // Keep mobile texture crisp while avoiding oversized render
       gl={{
         powerPreference: "high-performance",
         antialias: true,
@@ -157,7 +157,7 @@ function LandingGlobe() {
       <directionalLight position={[5, 7, 1]} intensity={3} color="#fff4d6" />
 
       <Suspense fallback={null}>
-        <group scale={isMobile ? 1.12 : 1}>
+        <group scale={isMobile ? 0.94 : 1}>
           <Earth />
         </group>
       </Suspense>
@@ -167,7 +167,7 @@ function LandingGlobe() {
         enablePan={false}
         enableRotate={false}
         autoRotate
-        autoRotateSpeed={isMobile ? 0.16 : 0.2}
+        autoRotateSpeed={isMobile ? 0.12 : 0.2}
       />
     </Canvas>
   );
