@@ -180,7 +180,7 @@ function Landing() {
           </b>
           {isMobile ? " " : " "}
           <br />
-          Deployed on Vercel.
+          Deployed on Vercel & Render.
         </p>
 
         <button
