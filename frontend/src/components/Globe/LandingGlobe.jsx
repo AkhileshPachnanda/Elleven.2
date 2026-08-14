@@ -80,7 +80,7 @@ function Earth() {
     return new THREE.ShaderMaterial({
       uniforms: {
         cloudMap: { value: cloudTexture },
-        opacity: { value: 0.3 }, // Slightly more subtle on landing
+        opacity: { value: 0.45 },
       },
       vertexShader: cloudVertexShader,
       fragmentShader: cloudFragmentShader,
@@ -109,9 +109,20 @@ function Earth() {
           map={earthTexture}
           clippingPlanes={clipPlanes}
           bumpMap={bumpTexture}
-          bumpScale={0.025}
+          bumpScale={0.014}
           roughness={0.9}
-          metalness={0.05}
+          metalness={0.04}
+          onBeforeCompile={(shader) => {
+            shader.fragmentShader = shader.fragmentShader.replace(
+              "#include <color_fragment>",
+              `
+                #include <color_fragment>
+                vec3 luma = vec3(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114)));
+                diffuseColor.rgb = mix(luma, diffuseColor.rgb, 1.09);
+                diffuseColor.rgb = (diffuseColor.rgb - 0.5) * 1.08 + 0.5;
+              `,
+            );
+          }}
         />
       </mesh>
 
@@ -136,8 +147,8 @@ function LandingGlobe() {
         localClippingEnabled: true,
       }}
     >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 7, 1]} intensity={3} color="#ffffff" />
+      <ambientLight intensity={0.65} color="#feffff" />
+      <directionalLight position={[5, 7, 1]} intensity={3} color="#fff4d6" />
 
       <Suspense fallback={null}>
         <Earth />

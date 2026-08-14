@@ -77,7 +77,11 @@ function Landing() {
             letterSpacing: "-0.01em",
           }}
         >
+          <a href="https://github.com/AkhileshPachnanda"
+            target="_blank"
+            rel="noopener noreferrer">
           Akhilesh Pachnanda
+          </a>
         </span>
         <div
           style={{

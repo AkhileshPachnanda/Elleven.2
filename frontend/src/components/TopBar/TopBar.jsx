@@ -67,7 +67,7 @@ function TopBar({ satelliteCount, onToggleList, isListOpen, simulatedTime, isLiv
             letterSpacing: '-0.01em',
             color: 'var(--text-primary)',
           }}>
-            Eleven.2
+            Elleven.2
           </span>
           {!isMobile && (
             <span style={{
