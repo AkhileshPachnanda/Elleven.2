@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from "three";
 
 /**
  * TexturePreloader — singleton service that background-loads textures
@@ -6,106 +6,125 @@ import * as THREE from 'three'
  */
 
 // Enable THREE.js built-in cache
-THREE.Cache.enabled = true
+THREE.Cache.enabled = true;
 
 const TEXTURE_MANIFEST = {
   // Full-res textures (for Command Center dashboard)
-  earthDay8k: '/assets/textures/earth_daymap_8k.jpg',
-  earthClouds8k: '/assets/textures/earth_clouds_8k.jpg',
-  earthBump4k: '/assets/textures/earth_bump_4k.jpg',
+  earthDay8k: "/assets/textures/earth_daymap_8k.jpg",
+  earthClouds8k: "/assets/textures/earth_clouds_8k.jpg",
+  earthBump4k: "/assets/textures/earth_bump_4k.jpg",
 
   // Lightweight textures (for Landing page)
-  earthDay2k: '/assets/textures/earth_daymap_2k.jpg',
-  earthClouds2k: '/assets/textures/earth_clouds_2k.jpg',
-  earthBump2k: '/assets/textures/earth_bump_2k.jpg',
-}
+  earthDay2k: "/assets/textures/earth_daymap_2k.jpg",
+  earthClouds2k: "/assets/textures/earth_clouds_2k.jpg",
+  earthBump2k: "/assets/textures/earth_bump_2k.jpg",
 
-const textureCache = new Map()
-const loadingPromises = new Map()
-const loader = new THREE.TextureLoader()
+  // High-res textures kept warm for the landing globe background
+  earthDayLandingHi: "/assets/textures/earth_daymap_4k.jpg",
+  earthCloudsLandingHi: "/assets/textures/earth_clouds_2k.jpg",
+  earthBumpLandingHi: "/assets/textures/earth_bump_2k.jpg",
+};
+
+const textureCache = new Map();
+const loadingPromises = new Map();
+const loader = new THREE.TextureLoader();
 
 /**
  * Load a single texture by key — returns a promise.
  * If already loaded, resolves immediately from cache.
  */
 function loadTexture(key) {
-  // Already loaded
   if (textureCache.has(key)) {
-    return Promise.resolve(textureCache.get(key))
+    return Promise.resolve(textureCache.get(key));
   }
 
-  // Already in-flight
   if (loadingPromises.has(key)) {
-    return loadingPromises.get(key)
+    return loadingPromises.get(key);
   }
 
-  const url = TEXTURE_MANIFEST[key]
+  const url = TEXTURE_MANIFEST[key];
   if (!url) {
-    return Promise.reject(new Error(`Unknown texture key: ${key}`))
+    return Promise.reject(new Error(`Unknown texture key: ${key}`));
   }
 
   const promise = new Promise((resolve, reject) => {
     loader.load(
       url,
       (texture) => {
-        // Configure texture defaults for globe rendering
-        texture.colorSpace = THREE.SRGBColorSpace
-        texture.anisotropy = 4 // Good quality without being expensive
-        textureCache.set(key, texture)
-        loadingPromises.delete(key)
-        resolve(texture)
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = 4;
+        textureCache.set(key, texture);
+        loadingPromises.delete(key);
+        resolve(texture);
       },
-      undefined, // onProgress — not useful for individual textures
+      undefined,
       () => {
-        loadingPromises.delete(key)
-        reject(new Error(`Failed to load texture: ${key}`))
-      }
-    )
-  })
+        loadingPromises.delete(key);
+        reject(new Error(`Failed to load texture: ${key}`));
+      },
+    );
+  });
 
-  loadingPromises.set(key, promise)
-  return promise
+  loadingPromises.set(key, promise);
+  return promise;
 }
 
-/**
- * Preload all dashboard textures in the background.
- * Uses requestIdleCallback to avoid blocking the main thread.
- * Call this from the Landing page after initial render.
- */
 function preloadDashboardTextures() {
-  const dashboardKeys = ['earthDay8k', 'earthClouds8k', 'earthBump4k']
+  const dashboardKeys = ["earthDay8k", "earthClouds8k", "earthBump4k"];
 
-  const scheduleWork = typeof requestIdleCallback === 'function'
-    ? requestIdleCallback
-    : (cb) => setTimeout(cb, 100)
+  const scheduleWork =
+    typeof requestIdleCallback === "function"
+      ? requestIdleCallback
+      : (cb) => setTimeout(cb, 100);
 
-  // Stagger loads to avoid saturating bandwidth
-  dashboardKeys.forEach((key, index) => {
+  dashboardKeys.forEach((key) => {
     scheduleWork(() => {
-      loadTexture(key).catch(() => {
-        // Silently fail — dashboard will load its own textures as fallback
-      })
-    })
-  })
+      loadTexture(key).catch(() => {});
+    });
+  });
 }
 
 /**
- * Preload the CommandCenter JS chunk so navigation is instant.
+ * Loads the landing globe's high-res texture set in parallel.
+ * Returns the array of textures once all are ready.
  */
+function preloadLandingHighResTextures() {
+  const landingHiKeys = [
+    "earthDayLandingHi",
+    "earthCloudsLandingHi",
+    "earthBumpLandingHi",
+  ];
+
+  return new Promise((resolve) => {
+    const work = () => {
+      Promise.all(
+        landingHiKeys.map((key) => loadTexture(key).catch(() => null)),
+      )
+        .then(resolve)
+        .catch(() => resolve([null, null, null]));
+    };
+
+    if (typeof requestIdleCallback === "function") {
+      requestIdleCallback(work);
+    } else {
+      setTimeout(work, 500);
+    }
+  });
+}
+
 function preloadCommandCenterChunk() {
-  const scheduleWork = typeof requestIdleCallback === 'function'
-    ? requestIdleCallback
-    : (cb) => setTimeout(cb, 200)
+  const scheduleWork =
+    typeof requestIdleCallback === "function"
+      ? requestIdleCallback
+      : (cb) => setTimeout(cb, 200);
 
   scheduleWork(() => {
-    // Vite dynamic import — will be code-split and prefetched
-    import('../pages/CommandCenter.jsx').catch(() => {
-      // Silent fail — will load normally on navigation
-    })
-  })
+    import("../pages/CommandCenter.jsx").catch(() => {});
+  });
 }
 
 export {
   preloadDashboardTextures,
+  preloadLandingHighResTextures,
   preloadCommandCenterChunk,
-}
+};

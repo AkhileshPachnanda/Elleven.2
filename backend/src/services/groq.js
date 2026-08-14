@@ -66,12 +66,10 @@ Strict Constraints:
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "qwen/qwen3-32b",
+      model: "openai/gpt-oss-120b",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 200,
+      max_tokens: 500,
       temperature: 0.4,
-      reasoning_effort: "none",
-      reasoning_format: "hidden",
     }),
   });
 
@@ -90,7 +88,19 @@ Strict Constraints:
   }
 
   const data = await response.json();
-  const rawIntel = data.choices?.[0]?.message?.content || "";
+  const choice = data.choices?.[0];
+
+  // For reasoning models (like gpt-oss-120b), extract from reasoning field
+  let rawIntel = choice?.message?.content || "";
+  if (!rawIntel && choice?.message?.reasoning) {
+    // Extract the actual response from the reasoning field (after the internal reasoning)
+    const reasoning = choice.message.reasoning;
+    const sentenceMatch = reasoning.match(/Sentence1:[\s\S]*/);
+    rawIntel = sentenceMatch
+      ? sentenceMatch[0].replace(/Check$/i, "").trim()
+      : reasoning;
+  }
+
   const intel = sanitizeModelOutput(rawIntel) || rawIntel.trim();
 
   cache.set(cacheKey, intel);
