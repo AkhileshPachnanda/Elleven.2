@@ -30,7 +30,7 @@ function Landing() {
       {/* Globe — background, slightly offset downward */}
       <div style={{
         position: 'absolute',
-        inset: 0,
+        inset: 10,
         zIndex: 0,
       }}>
         <LandingGlobe />
@@ -42,8 +42,8 @@ function Landing() {
         inset: 0,
         zIndex: 5,
         background: `
-          radial-gradient(ellipse at center 40%, transparent 30%, var(--bg-primary) 75%),
-          linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%, transparent 70%, var(--bg-primary) 100%)
+          radial-gradient(ellipse at center 70%, transparent 20%, var(--bg-primary) 80%),
+          linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%, transparent 90%, var(--bg-primary) 100%)
         `,
         pointerEvents: 'none',
       }} />
