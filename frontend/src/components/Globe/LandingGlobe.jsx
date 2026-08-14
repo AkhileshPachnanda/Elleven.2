@@ -1,6 +1,6 @@
 import { useRef, Suspense, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Stars, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { TextureLoader } from "three";
 import * as THREE from "three";
 import { preloadLandingHighResTextures } from "../../lib/texturePreloader";
@@ -112,17 +112,6 @@ function Earth() {
           bumpScale={0.014}
           roughness={0.9}
           metalness={0.04}
-          onBeforeCompile={(shader) => {
-            shader.fragmentShader = shader.fragmentShader.replace(
-              "#include <color_fragment>",
-              `
-                #include <color_fragment>
-                vec3 luma = vec3(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114)));
-                diffuseColor.rgb = mix(luma, diffuseColor.rgb, 1.09);
-                diffuseColor.rgb = (diffuseColor.rgb - 0.5) * 1.08 + 0.5;
-              `,
-            );
-          }}
         />
       </mesh>
 
@@ -136,9 +125,26 @@ function Earth() {
 }
 
 function LandingGlobe() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false,
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <Canvas
-      camera={{ position: [0, 0, 2], fov: 32 }}
+      camera={{
+        position: [0, 0, isMobile ? 2.35 : 2],
+        fov: isMobile ? 40 : 32,
+      }}
       style={{ background: "transparent" }}
       dpr={[1, 1.2]} // Cap pixel ratio for performance
       gl={{
@@ -151,7 +157,9 @@ function LandingGlobe() {
       <directionalLight position={[5, 7, 1]} intensity={3} color="#fff4d6" />
 
       <Suspense fallback={null}>
-        <Earth />
+        <group scale={isMobile ? 1.12 : 1}>
+          <Earth />
+        </group>
       </Suspense>
 
       <OrbitControls
@@ -159,7 +167,7 @@ function LandingGlobe() {
         enablePan={false}
         enableRotate={false}
         autoRotate
-        autoRotateSpeed={0.2}
+        autoRotateSpeed={isMobile ? 0.16 : 0.2}
       />
     </Canvas>
   );
