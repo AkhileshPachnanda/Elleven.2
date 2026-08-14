@@ -46,20 +46,23 @@ function Earth() {
   useEffect(() => {
     let active = true;
 
-    preloadLandingHighResTextures()
-      .then(([day, clouds, bump]) => {
-        if (!active) return;
+    const timer = setTimeout(() => {
+      preloadLandingHighResTextures()
+        .then(([day, clouds, bump]) => {
+          if (!active) return;
 
-        if (day && clouds && bump) {
-          setHighResTextures({ day, clouds, bump });
-        }
-      })
-      .catch(() => {
-        if (active) setHighResTextures(null);
-      });
+          if (day && clouds && bump) {
+            setHighResTextures({ day, clouds, bump });
+          }
+        })
+        .catch(() => {
+          if (active) setHighResTextures(null);
+        });
+    }, 3000);
 
     return () => {
       active = false;
+      clearTimeout(timer);
     };
   }, []);
 
@@ -68,7 +71,7 @@ function Earth() {
   const cloudTexture = highResTextures?.clouds ?? lowCloudTexture;
 
   const clipPlane = useMemo(
-    () => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.2),
+    () => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.8),
     [],
   );
   const clipPlanes = useMemo(() => [clipPlane], [clipPlane]);
@@ -124,7 +127,7 @@ function Earth() {
 function LandingGlobe() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 2], fov: 30 }}
+      camera={{ position: [0, 0, 2], fov: 32 }}
       style={{ background: "transparent" }}
       dpr={[1, 1.5]} // Cap pixel ratio for performance
       gl={{

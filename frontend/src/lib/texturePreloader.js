@@ -20,9 +20,9 @@ const TEXTURE_MANIFEST = {
   earthBump2k: "/assets/textures/earth_bump_2k.jpg",
 
   // High-res textures kept warm for the landing globe background
-  earthDayLandingHi: "/assets/textures/earth_daymap_8k.jpg",
-  earthCloudsLandingHi: "/assets/textures/earth_clouds_8k.jpg",
-  earthBumpLandingHi: "/assets/textures/earth_bump_4k.jpg",
+  earthDayLandingHi: "/assets/textures/earth_daymap_4k.jpg",
+  earthCloudsLandingHi: "/assets/textures/earth_clouds_2k.jpg",
+  earthBumpLandingHi: "/assets/textures/earth_bump_2k.jpg",
 };
 
 const textureCache = new Map();
@@ -95,9 +95,21 @@ function preloadLandingHighResTextures() {
     "earthBumpLandingHi",
   ];
 
-  return Promise.all(
-    landingHiKeys.map((key) => loadTexture(key).catch(() => null)),
-  );
+  return new Promise((resolve) => {
+    const work = () => {
+      Promise.all(
+        landingHiKeys.map((key) => loadTexture(key).catch(() => null)),
+      )
+        .then(resolve)
+        .catch(() => resolve([null, null, null]));
+    };
+
+    if (typeof requestIdleCallback === "function") {
+      requestIdleCallback(work);
+    } else {
+      setTimeout(work, 500);
+    }
+  });
 }
 
 function preloadCommandCenterChunk() {
