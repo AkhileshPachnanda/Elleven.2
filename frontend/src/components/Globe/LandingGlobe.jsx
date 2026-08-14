@@ -136,8 +136,8 @@ function LandingGlobe() {
         localClippingEnabled: true,
       }}
     >
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[5, 7, 1]} intensity={4} color="#ffffff" />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 7, 1]} intensity={3} color="#ffffff" />
 
       <Suspense fallback={null}>
         <Earth />
