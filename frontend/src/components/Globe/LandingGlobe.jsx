@@ -96,7 +96,7 @@ function Earth() {
       meshRef.current.rotation.y += delta * 0.04;
     }
     if (cloudRef.current) {
-      cloudRef.current.rotation.y += delta * 0.05; // Slightly faster than earth for drift effect
+      cloudRef.current.rotation.y += delta * 0.06; // Slightly faster than earth for drift effect
     }
   });
 
@@ -117,7 +117,7 @@ function Earth() {
 
       {/* Cloud layer — even lower poly for landing */}
       <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.006, 64, 64]} />
+        <sphereGeometry args={[1.002, 64, 64]} />
         <primitive object={cloudMaterial} attach="material" />
       </mesh>
     </group>
@@ -136,8 +136,8 @@ function LandingGlobe() {
         localClippingEnabled: true,
       }}
     >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 3, 5]} intensity={1.8} color="#ffffff" />
+      <ambientLight intensity={0.1} />
+      <directionalLight position={[5, 7, 1]} intensity={4} color="#ffffff" />
 
       <Suspense fallback={null}>
         <Earth />

@@ -95,51 +95,29 @@ function Landing() {
       {/* Hero content */}
       <div style={{
         position: 'absolute',
+        top:'13%',
         inset: 0,
         zIndex: 10,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
         textAlign: 'center',
         pointerEvents: 'none',
       }}>
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--accent)',
-            letterSpacing: '0.08em',
-            marginBottom: '12px',
-            textTransform: 'uppercase',
-          }}
-        >
-          Indian Space Research Organisation
-        </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.5 }}
+        <p
           style={{
             fontSize: 'clamp(32px, 5vw, 56px)',
             fontWeight: 700,
             color: 'var(--text-primary)',
-            lineHeight: 1.1,
             letterSpacing: '-0.025em',
             marginBottom: '16px',
           }}
         >
-          India's eyes<br />in orbit
-        </motion.h1>
+          Elleven.2
+        </p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
+        <p
           style={{
             fontSize: '16px',
             fontWeight: 400,
@@ -151,7 +129,7 @@ function Landing() {
         >
           Track every ISRO satellite in real-time.
           Live orbital positions, telemetry, and mission data.
-        </motion.p>
+        </p>
 
         <motion.button
           initial={{ opacity: 0, y: 10 }}
