@@ -202,7 +202,7 @@ function Landing() {
         <span>created by pacman.</span>
         <span>contribute</span>
         <a
-          href="https://github.com/AkhileshPachnanda/ISRO-Mission_Control"
+          href="https://github.com/AkhileshPachnanda/Elleven.2"
           target="_blank"
           rel="noopener noreferrer"
           style={{
