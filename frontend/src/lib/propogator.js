@@ -15,6 +15,8 @@ export function getCurrentPosition(tle, time = new Date()) {
     const velocityEci = positionAndVelocity.velocity
 
     if (!positionEci || typeof positionEci === 'boolean') return null
+    // Guard against corrupt TLEs that produce NaN coordinates instead of throwing
+    if (Number.isNaN(positionEci.x) || Number.isNaN(positionEci.y) || Number.isNaN(positionEci.z)) return null
 
     const gmst = satellite.gstime(time)
     const geodetic = satellite.eciToGeodetic(positionEci, gmst)
@@ -48,6 +50,8 @@ export function getGroundTrack(tle, minutesAhead = 90, stepMinutes = 1, baseTime
       const pv = satellite.propagate(satrec, time)
 
       if (!pv || !pv.position || typeof pv.position === 'boolean') continue
+      // Skip NaN positions from corrupt TLEs
+      if (Number.isNaN(pv.position.x) || Number.isNaN(pv.position.y) || Number.isNaN(pv.position.z)) continue
 
       const gmst = satellite.gstime(time)
       const geo = satellite.eciToGeodetic(pv.position, gmst)
