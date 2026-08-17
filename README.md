@@ -12,7 +12,9 @@ A real-time 3D orbital tracking dashboard for ISRO assets and notable internatio
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
   <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
   <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=FCC72B" alt="Vitest" />
+  <img src="https://img.shields.io/badge/Lighthouse-98%20%7C%20100%20%7C%20100%20%7C%20100-success?style=for-the-badge&logo=lighthouse&logoColor=white" alt="Lighthouse Score" />
 </p>
+
 
 <img width="1892" height="1046" alt="image" src="https://github.com/user-attachments/assets/a4d83a3d-142f-464c-9cb5-9941df7dc4ac" />
 
